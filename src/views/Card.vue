@@ -492,6 +492,10 @@ export default {
         &.selected {
           border-bottom: 3px solid #ff7627;
         }
+
+        .dark & {
+          color: white;
+        }
       }
     }
 
