@@ -1,0 +1,240 @@
+{
+  "nested": {
+    "Card": {
+      "fields": {
+        "id": {
+          "type": "int32",
+          "id": 1
+        },
+        "name": {
+          "type": "string",
+          "id": 2
+        },
+        "cost": {
+          "type": "int32",
+          "id": 3
+        },
+        "rarity": {
+          "type": "int32",
+          "id": 4
+        },
+        "element": {
+          "type": "int32",
+          "id": 5
+        },
+        "hp": {
+          "type": "int32",
+          "id": 6
+        },
+        "atk": {
+          "type": "int32",
+          "id": 7
+        },
+        "def": {
+          "type": "int32",
+          "id": 8
+        },
+        "hp_init": {
+          "type": "int32",
+          "id": 9
+        },
+        "atk_init": {
+          "type": "int32",
+          "id": 10
+        },
+        "def_init": {
+          "type": "int32",
+          "id": 11
+        },
+        "leader_skill": {
+          "type": "Skill",
+          "id": 12
+        },
+        "passive_skill": {
+          "type": "Skill",
+          "id": 13
+        },
+        "specials": {
+          "rule": "repeated",
+          "type": "Special",
+          "id": 14
+        },
+        "active_skills": {
+          "rule": "repeated",
+          "type": "Active",
+          "id": 15
+        },
+        "link_skills": {
+          "rule": "repeated",
+          "type": "int32",
+          "id": 16
+        },
+        "categories": {
+          "rule": "repeated",
+          "type": "int32",
+          "id": 17
+        },
+        "transformations": {
+          "rule": "repeated",
+          "type": "Transformation",
+          "id": 18
+        },
+        "transformed_from": {
+          "rule": "repeated",
+          "type": "int32",
+          "id": 19
+        },
+        "dokkan_into": {
+          "type": "int32",
+          "id": 20
+        },
+        "dokkan_from": {
+          "type": "int32",
+          "id": 21
+        },
+        "extreme": {
+          "type": "Extreme",
+          "id": 22
+        },
+        "potentials": {
+          "rule": "repeated",
+          "type": "Potential",
+          "id": 23
+        },
+        "resource_id": {
+          "type": "int32",
+          "id": 24
+        }
+      },
+      "nested": {
+        "Skill": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1
+            },
+            "description": {
+              "type": "string",
+              "id": 2
+            }
+          }
+        },
+        "Special": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1
+            },
+            "style": {
+              "type": "Style",
+              "id": 2
+            },
+            "lv_start": {
+              "type": "int32",
+              "id": 3
+            },
+            "eball_num_start": {
+              "type": "int32",
+              "id": 4
+            },
+            "description": {
+              "type": "string",
+              "id": 5
+            },
+            "causality": {
+              "type": "string",
+              "id": 6
+            },
+            "category": {
+              "type": "int32",
+              "id": 7
+            }
+          },
+          "nested": {
+            "Style": {
+              "values": {
+                "Normal": 0,
+                "Hyper": 1,
+                "Condition": 2
+              }
+            }
+          }
+        },
+        "Active": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1
+            },
+            "effect": {
+              "type": "string",
+              "id": 2
+            },
+            "condition": {
+              "type": "string",
+              "id": 3
+            },
+            "category": {
+              "type": "int32",
+              "id": 4
+            }
+          }
+        },
+        "Transformation": {
+          "fields": {
+            "card_id": {
+              "type": "int32",
+              "id": 1
+            },
+            "description": {
+              "type": "string",
+              "id": 2
+            }
+          }
+        },
+        "Extreme": {
+          "fields": {
+            "leader_skill": {
+              "type": "Skill",
+              "id": 1
+            },
+            "passive_skill": {
+              "type": "Skill",
+              "id": 2
+            },
+            "specials": {
+              "rule": "repeated",
+              "type": "Special",
+              "id": 3
+            }
+          }
+        },
+        "Potential": {
+          "fields": {
+            "hp": {
+              "type": "int32",
+              "id": 1
+            },
+            "atk": {
+              "type": "int32",
+              "id": 2
+            },
+            "def": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        }
+      }
+    },
+    "CardMap": {
+      "fields": {
+        "data": {
+          "keyType": "int32",
+          "type": "Card",
+          "id": 1
+        }
+      }
+    }
+  }
+}
