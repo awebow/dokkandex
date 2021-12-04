@@ -1,7 +1,7 @@
 <template>
   <div class="card-thumb" @mouseover="mouseOver" @mouseleave="mouseOut" @contextmenu="onContext">
     <router-link
-      :to="`/cards/${card.id}`"
+      :to="{path: `/cards/${card.id}`, query: {extreme: extreme || undefined}}"
       :style="{ 'background-image': `url(${assets.thumbBase(card.element, card.rarity)}` }">
 
       <img class="thumb" :src="resources.cardThumb(card)" />
@@ -19,12 +19,14 @@
       <tbody>
         <tr>
           <th>리더 스킬</th>
-          <td v-if="card.leader_skill">{{ card.leader_skill.description }}</td>
+          <td v-if="extreme && card.extreme.leader_skill">{{ card.extreme.leader_skill.description }}</td>
+          <td v-else-if="card.leader_skill">{{ card.leader_skill.description }}</td>
           <td v-else>없음</td>
         </tr>
         <tr>
           <th>패시브 스킬</th>
-          <td v-if="card.passive_skill">{{ card.passive_skill.description }}</td>
+          <td v-if="extreme && card.extreme.passive_skill">{{ card.extreme.passive_skill.description }}</td>
+          <td v-else-if="card.passive_skill">{{ card.passive_skill.description }}</td>
           <td v-else>없음</td>
         </tr>
       </tbody>
@@ -38,7 +40,13 @@ import resources from '../resources';
 
 export default {
 
-  props: ['card'],
+  props: {
+    card: Object,
+    extreme: {
+      type: Boolean,
+      default: false
+    }
+  },
 
   data: () => ({
     tooltipTimeout: null,

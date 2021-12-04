@@ -42,15 +42,19 @@
       </div>
       <div class="descriptions-wrapper">
         <div v-if="$root.cards[$route.params.id].extreme" class="tabs">
-          <button type="button" @click="() => this.extreme = false" :class="{ selected: !extreme }">기본</button>
-          <button type="button" @click="() => this.extreme = true" :class="{ selected: extreme }">극한 Z 각성</button>
+          <router-link :to="{query: {}}" :class="{ selected: !$route.query.extreme }">
+            기본
+          </router-link>
+          <router-link :to="{query: {extreme: true}}" :class="{ selected: $route.query.extreme }">
+            극한 Z 각성
+          </router-link>
         </div>
         <table class="card-info">
           <tbody>
             <tr>
               <th>리더 스킬</th>
               <td v-if="$root.cards[$route.params.id].leader_skill == null">없음</td>
-              <td v-else-if="extreme">{{ $root.cards[$route.params.id].extreme.leader_skill.description }}</td>
+              <td v-else-if="$route.query.extreme == 'true'">{{ $root.cards[$route.params.id].extreme.leader_skill.description }}</td>
               <td v-else>{{ $root.cards[$route.params.id].leader_skill.description }}</td>
             </tr>
 
@@ -59,7 +63,7 @@
               <td class="passive-name" v-if="$root.cards[$route.params.id].passive_skill == null">
                 없음
               </td>
-              <td class="passive-name" v-else-if="extreme">
+              <td class="passive-name" v-else-if="$route.query.extreme == 'true'">
                 {{ $root.cards[$route.params.id].extreme.passive_skill.name }}
               </td>
               <td class="passive-name" v-else>
@@ -67,7 +71,7 @@
               </td>
             </tr>
             <tr>
-              <td v-if="extreme">{{ $root.cards[$route.params.id].extreme.passive_skill.description }}</td>
+              <td v-if="$route.query.extreme == 'true'">{{ $root.cards[$route.params.id].extreme.passive_skill.description }}</td>
               <td v-else>{{ $root.cards[$route.params.id].passive_skill.description }}</td>
             </tr>
 
@@ -76,7 +80,7 @@
               <td>
                 <ul>
                   <li v-for="s in (
-                    extreme
+                    $route.query.extreme == 'true'
                     ? $root.cards[$route.params.id].extreme.specials
                     : $root.cards[$route.params.id].specials
                   )">
@@ -110,7 +114,7 @@
               <td>
                 <ul>
                   <li v-for="t in transformations">
-                    <CardThumb :card="$root.cards[t.card_id]" />
+                    <CardThumb :card="$root.cards[t.card_id]" :extreme="$route.query.extreme == 'true'" />
                     <div>{{ t.description }}</div>
                   </li>
                 </ul>
@@ -170,7 +174,6 @@ import CardThumb from '../components/CardThumb.vue';
 export default {
 
   data: () => ({
-    extreme: false,
     overflow: false,
     potential: [false, false, false, false],
     resizeObserver: null
@@ -217,7 +220,7 @@ export default {
           pot += card.potentials[i].hp;
       }
 
-      if(card.rarity == 4 && this.extreme)
+      if(card.rarity == 4 && this.$route.query.extreme == "true")
         return Math.floor(card.hp + (card.hp - card.hp_init) * 0.4839) + pot;
       
       return card.hp + pot;
@@ -232,7 +235,7 @@ export default {
           pot += card.potentials[i].atk;
       }
 
-      if(card.rarity == 4 && this.extreme)
+      if(card.rarity == 4 && this.$route.query.extreme == "true")
         return Math.floor(card.atk + (card.atk - card.atk_init) * 0.4839) + pot;
       
       return card.atk + pot;
@@ -247,7 +250,7 @@ export default {
           pot += card.potentials[i].def;
       }
 
-      if(card.rarity == 4 && this.extreme)
+      if(card.rarity == 4 && this.$route.query.extreme == "true")
         return Math.floor(card.def + (card.def - card.def_init) * 0.4839) + pot;
       
       return card.def + pot;
@@ -260,7 +263,10 @@ export default {
 
       var result = [{card_id: root.id, description: ''}];
       for(let i = 0; i < result.length; i++) {
-        result.push(...this.$root.cards[result[i].card_id].transformations);
+        if(this.$route.query.extreme == "true" && this.$root.cards[result[i].card_id].extreme.transformations)
+          result.push(...this.$root.cards[result[i].card_id].extreme.transformations);
+        else
+          result.push(...this.$root.cards[result[i].card_id].transformations);
       }
 
       if(result.length == 1)
@@ -289,7 +295,6 @@ export default {
 
   watch: {
     "$route.params.id": function() {
-      this.extreme = false;
       this.potential = [false, false, false, false];
     }
   }
@@ -475,15 +480,20 @@ export default {
     .tabs {
       text-align: left;
 
-      button {
+      a {
+        display: inline-flex;
         background: none;
         outline: none;
         border: none;
         border-radius: 2px;
+        align-items: center;
+        justify-content: center;
 
         width: 96px;
         height: 48px;
         font-size: 15px;
+        color: black;
+        text-decoration: none;
 
         &:hover {
           background: #eeeeee;
