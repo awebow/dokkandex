@@ -31,32 +31,30 @@ export default {
       var fLink = storage("link_skills.json");
       var fCat = storage("categories.json");
 
-      var size = 0;
       var completed = 0;
       try {
-        size += parseInt((await axios.head(fCard)).headers["content-length"]);
-        size += parseInt((await axios.head(fLink)).headers["content-length"]);
-        size += parseInt((await axios.head(fCat)).headers["content-length"]);
+        var meta = (await axios.get(storage("meta.json"))).data;
+        var totalSize = meta["cards.data"] + meta["link_skills.json"] + meta["categories.json"];
 
         var root = protobuf.Root.fromJSON(CardMessage);
         var CardMap = root.lookupType('CardMap');
 
         var res = await axios.get(fCard, {
           responseType: "arraybuffer",
-          onDownloadProgress: e => this.progress = ((completed + e.loaded) / size * 100)
+          onDownloadProgress: e => this.progress = ((completed + e.loaded) / totalSize * 100)
         });
         var data = CardMap.toObject(CardMap.decode(new Uint8Array(res.data)), {arrays: true, enums: String});
         this.cards = data.data;
-        completed = parseInt(res.headers["content-length"]);
+        completed = meta["cards.data"];
 
         res = (await axios.get(fLink, {
-          onDownloadProgress: e => this.progress = ((completed + e.loaded) / size * 100)
+          onDownloadProgress: e => this.progress = ((completed + e.loaded) / totalSize * 100)
         }));
         this.linkSkills = res.data;
-        completed += parseInt(res.headers["content-length"]);
+        completed += meta["link_skills.json"];
 
         res = (await axios.get(fCat, {
-          onDownloadProgress: e => this.progress = ((completed + e.loaded) / size * 100)
+          onDownloadProgress: e => this.progress = ((completed + e.loaded) / totalSize * 100)
         }));
         this.categories = res.data;
         this.loaded = true;
